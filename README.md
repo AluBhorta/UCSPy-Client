@@ -1,44 +1,51 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# UCSPy-Client
 
-## Available Scripts
+Client Web App for UCSPy-Engine.
 
-In the project directory, you can run:
+## Usage
 
-### `npm start`
+...
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Requirements
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+#### data
 
-### `npm test`
+- sch_params
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - listView() -> /data/schedule-params
+  - upload(file: C, I, R, T, CG) -> save_sch_params(C, I, R, T, CG)
+  - solve(sch_param_name) -> /solve?sch_param=sch_param_name
 
-### `npm run build`
+  - ~download(sch_param_name) -> return (file: C, I, R, T, CG)
+  - ~delete()
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- logs
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  - listView() -> /data/logs
+  - plot(log_file) -> /plot?log=log_file
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  - ~upload()
+  - ~download(log_name) -> return log_name
+  - ~delete()
 
-### `npm run eject`
+- schedules
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  - listView() -> /data/schedules
+  - inspect(schedule_name) -> /inspect?schedule=schedule_name
+  - download(schedule_name) -> return schedule_name
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  - ~upload()
+  - ~delete()
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### solve
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+makeConfig(): -> returns a UserConfig
 
-## Learn More
+- actions:
+  - Solver.solve()
+  - Solver.stop()
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  
+### plot
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### inspect
