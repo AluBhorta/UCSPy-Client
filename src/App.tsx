@@ -3,16 +3,21 @@ import React from "react";
 import "./App.css";
 import AppRoutes from "./AppRoutes";
 import AppState from "./AppState";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import AppHeader from "./components/AppHeader";
+import AppBody from "./components/AppBody";
 
 function App() {
   return (
     <div className="App">
       <AppState>
-        <AppRoutes>
+        <Router>
           <AppHeader />
-        </AppRoutes>
+          <AppBody>
+            <AppRoutes />
+          </AppBody>
+        </Router>
       </AppState>
     </div>
   );

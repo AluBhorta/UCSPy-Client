@@ -9,11 +9,14 @@ import {
   ListItemText,
   Checkbox,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   Button,
   Slider,
+  FormLabel,
+  Divider,
+  ListItemSecondaryAction,
+  ListItemIcon,
 } from "@material-ui/core";
 
 const SolveConfigPage: React.FC = () => {
@@ -49,23 +52,20 @@ const SolveConfigPage: React.FC = () => {
   //   return () => {};
   // }, []);
 
-  const gridItemSize = 4;
   return (
     <div>
       <h1>Configure Solver</h1>
       <hr />
       <Grid container spacing={4}>
-        <Grid item sm={gridItemSize}>
+        <Grid item md>
           <Paper>
             <Box padding={2}>
               <h2>Schedle Param</h2>
               <div>
-                <p>Select from existing.</p>
                 <FormControl>
-                  <InputLabel id="scheduleParamLabel">Age</InputLabel>
+                  <FormLabel>Select from existing.</FormLabel>
                   <Select
-                    labelId="scheduleParamLabel"
-                    id="scheduleParamSelect"
+                    id="scheduleParamInput"
                     value={10}
                     // onChange={handleChange}
                   >
@@ -95,93 +95,155 @@ const SolveConfigPage: React.FC = () => {
                   }}
                 >
                   Upload
-                </Button>{" "}
-                new.
+                </Button>
               </div>
             </Box>
           </Paper>
         </Grid>
-        <Grid item sm={gridItemSize}>
-          <Paper>
-            <Box padding={2}>
-              <h2>Constraints</h2>
-              <p>Select the constraints to use.</p>
-              <div>
-                <h3>Hard Constraints</h3>
-                <List>
-                  {/* MOCK */}
-                  {[1, 2].map((i) => (
-                    <ListItem key={i}>
-                      <ListItemText
-                        primary={`Hard Constraint ${i}`}
-                        secondary="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Perferendis repellendus, vitae eos,"
-                      />
-                      <Checkbox />
-                    </ListItem>
-                  ))}
-                  {configDesc.constrinats.hardConstraints.map((hc) => (
-                    <ListItem key={hc.id}>
-                      <ListItemText primary={hc.id} secondary={hc.desc} />
-                      <Checkbox />
-                    </ListItem>
-                  ))}
-                </List>
-              </div>
-              <div>
-                <h3>Soft Constraints</h3>
-                <List>
-                  {/* MOCK */}
-                  {[1, 2, 3, 4].map((i) => (
-                    <ListItem key={i}>
-                      <ListItemText
-                        primary={`Soft Constraint ${i}`}
-                        secondary="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Perferendis repellendus, vitae eos, sdaf dsafj"
-                      />
-                      <Slider
-                        min={0}
-                        max={1}
-                        defaultValue={0.5}
-                        aria-labelledby="discrete-slider-always"
-                        step={0.001}
-                        valueLabelDisplay="on"
-                      />
-                      <Checkbox />
-                    </ListItem>
-                  ))}
-                  {configDesc.constrinats.softConstraints.map((sc) => (
-                    <ListItem key={sc.id}>
-                      <ListItemText primary={sc.id} secondary={sc.desc} />
-                      <Slider
-                        min={0}
-                        max={1}
-                        defaultValue={0.5}
-                        aria-labelledby="discrete-slider-always"
-                        step={0.001}
-                        valueLabelDisplay="on"
-                      />
-                      <Checkbox />
-                    </ListItem>
-                  ))}
-                </List>
-              </div>
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item sm={gridItemSize}>
+
+        <Grid item md>
           <Paper>
             <Box padding={2}>
               <h2>Fitness</h2>
+              <div>
+                <FormControl>
+                  <FormLabel>Select fitness function.</FormLabel>
+
+                  <Select
+                    id="fitnessInput"
+                    value={1}
+                    // onChange={handleChange}
+                  >
+                    {/* MOCK */}
+                    <MenuItem value={1}>Tanh</MenuItem>
+                    <MenuItem value={2}>Expo</MenuItem>
+                    {configDesc.fitness.functionNames.map((fName, idx) => (
+                      <MenuItem key={idx} value={fName}>
+                        {fName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </div>
+              <br />
+              <div>
+                <FormControl>
+                  <FormLabel>Min Acceptable Fitness</FormLabel>
+                  <Slider
+                    min={0}
+                    max={1}
+                    defaultValue={0.5}
+                    aria-labelledby="discrete-slider-always"
+                    step={0.001}
+                    valueLabelDisplay="auto"
+                  />
+                </FormControl>
+              </div>
             </Box>
           </Paper>
         </Grid>
-        <Grid item sm={gridItemSize}>
-          <Box padding={2}>
-            <h2>Algorithm</h2>
-          </Box>
+
+        <Grid item md>
+          <Paper>
+            <Box padding={2}>
+              <h2>Algorithm</h2>
+              <FormControl>
+                <FormLabel>Select algorithm.</FormLabel>
+                <Select
+                  id="algorithmInput"
+                  value={1}
+                  // onChange={handleChange}
+                >
+                  {/* MOCK */}
+                  <MenuItem value={1}>Genetic Algorithm</MenuItem>
+                  <MenuItem value={2}>Memetic Algorithm</MenuItem>
+                  {configDesc.algorithm.algorithmNames.map((aName, idx) => (
+                    <MenuItem key={idx} value={aName}>
+                      {aName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          </Paper>
         </Grid>
       </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item md>
+          <Paper>
+            <Box padding={2}>
+              <h2>Constraints</h2>
+              <FormLabel>Select the constraints to use.</FormLabel>
+              <div>
+                <h3>Hard Constraints</h3>
+                <List>
+                  <FormControl>
+                    {/* MOCK */}
+                    {[1, 2].map((i) => (
+                      <ListItem key={i}>
+                        <ListItemIcon>
+                          <Checkbox />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={`Hard Constraint ${i}`}
+                          secondary="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                    Perferendis repellendus, vitae eos,"
+                        />
+                      </ListItem>
+                    ))}
+                    {configDesc.constrinats.hardConstraints.map((hc) => (
+                      <ListItem key={hc.id}>
+                        <ListItemText primary={hc.id} secondary={hc.desc} />
+                        <Checkbox />
+                      </ListItem>
+                    ))}
+                  </FormControl>
+                </List>
+              </div>
+              <Divider />
+              <div>
+                <h3>Soft Constraints</h3>
+                <List>
+                  <FormControl>
+                    {/* MOCK */}
+                    {[1, 2, 3, 4].map((i) => (
+                      <ListItem key={i}>
+                        <ListItemIcon>
+                          <Checkbox />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={`Soft Constraint ${i}`}
+                          secondary="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, itaque veritatis ullam facere obcaecati assumenda distinctio ratione eius ?"
+                        />
+                        <FormLabel>Penalty</FormLabel>
+                        <Slider
+                          min={0}
+                          max={1}
+                          defaultValue={0.5}
+                          aria-labelledby="discrete-slider-always"
+                          step={0.001}
+                          valueLabelDisplay="auto"
+                        />
+                      </ListItem>
+                    ))}
+                  </FormControl>
+                </List>
+              </div>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+      <Box margin={2}>
+        <Button
+          size="large"
+          variant="contained"
+          color="secondary"
+          component="span"
+        >
+          RUN!
+        </Button>
+      </Box>
     </div>
   );
 };
