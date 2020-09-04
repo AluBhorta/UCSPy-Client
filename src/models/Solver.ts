@@ -21,17 +21,15 @@ export class Solver {
   getStatus = () => this.status;
 
   getConfig = () => this.userConfig;
-  setConfig = (_config: UserConfig) => {
-    this.userConfig = _config;
-  };
 
-  solve = () => {
+  solve = (_config?: UserConfig) => {
     this.status = "RUNNING";
     /* TODO
     open connection to engine and send userConfig
     keep receiving progress {epoch, fitness}
     on 'complete' return: {fitness, scheduleName, logName, timeTaken}
     */
+    this.status = "STOPPED";
   };
 
   stop = () => {
@@ -40,3 +38,7 @@ export class Solver {
     // on 'stop', send kill signal and return: {fitness, scheduleName, logName, timeTaken}
   };
 }
+
+const s = new Solver();
+
+s.solve();

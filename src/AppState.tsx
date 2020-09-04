@@ -6,7 +6,7 @@ const AppContext = createContext({
 });
 
 const AppState: React.FC = ({ children }) => {
-  const appSolver: Solver = new Solver();
+  const appSolver = new Solver();
 
   return (
     <>

@@ -10,7 +10,7 @@ import Error404Page from "./pages/Error404Page";
 
 const AppRoutes: React.FC = ({ children }) => {
   return (
-    <div>
+    <>
       <Router>
         {children}
 
@@ -38,7 +38,7 @@ const AppRoutes: React.FC = ({ children }) => {
           </Route>
         </Switch>
       </Router>
-    </div>
+    </>
   );
 };
 
