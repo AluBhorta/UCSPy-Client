@@ -1,21 +1,23 @@
 import React from "react";
-import { List, ListItem, Card, CardContent, CardHeader, Grid } from "@material-ui/core";
-
+import { List, ListItem } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const DataRootPage: React.FC = () => {
   return (
     <div>
-      <h1>DataRootPage</h1>
-      <Card>
-        <CardHeader>Data</CardHeader>
-        <CardContent>
-          <List>
-            <ListItem>Schedule Params</ListItem>
-            <ListItem>Logs</ListItem>
-            <ListItem>Output Schedules</ListItem>
-          </List>
-        </CardContent>
-      </Card>
+      <h1>Data</h1>
+
+      <List>
+        <ListItem>
+          <Link to="/data/schedule-params">Schedule Params</Link>
+        </ListItem>
+        <ListItem>
+          <Link to="/data/logs">Logs</Link>
+        </ListItem>
+        <ListItem>
+          <Link to="/data/schedules">Schedules</Link>
+        </ListItem>
+      </List>
     </div>
   );
 };

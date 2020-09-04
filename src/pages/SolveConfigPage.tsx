@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { UserConfig, ConfigDescription } from "../models/Config";
 import {
   Grid,
@@ -15,7 +15,6 @@ import {
   Slider,
   FormLabel,
   Divider,
-  ListItemSecondaryAction,
   ListItemIcon,
 } from "@material-ui/core";
 
