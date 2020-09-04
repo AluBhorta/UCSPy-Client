@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import PlotPage from "./pages/PlotPage";
 import InspectPage from "./pages/InspectPage";
@@ -16,15 +16,22 @@ const AppRoutes: React.FC = () => {
         <Route path="/" exact>
           <HomePage />
         </Route>
+
         <Route path="/solve/config" exact>
           <SolveConfigPage />
         </Route>
         <Route path="/solve/run" exact>
           <SolveRunPage />
         </Route>
+        
         <Route path="/plot" exact>
-          <PlotPage />
+          <Redirect to="/data/logs" />
         </Route>
+
+        <Route path="/plot/:logFileName" exact>
+          {({ match }) => <PlotPage logFileName={match?.params.logFileName} />}
+        </Route>
+
         <Route path="/inspect" exact>
           <InspectPage />
         </Route>

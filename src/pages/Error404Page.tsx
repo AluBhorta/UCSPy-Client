@@ -6,10 +6,11 @@ const Error404Page: React.FC<{
   return (
     <div>
       <h1>Error 404</h1>
+      {message ? <h3>{message}</h3> : <h3>Page not found!</h3>}
+
       <p>
-        Page not found! If you are lost, go <a href="/">Home</a>.{" "}
+        If you are lost, go <a href="/">Home</a>.
       </p>
-      <p>{message}</p>
     </div>
   );
 };

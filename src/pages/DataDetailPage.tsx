@@ -13,7 +13,8 @@ const DataDetailPage: React.FC<{
   pageName: string;
 }> = ({ pageName }) => {
   const pageNames = ["schedule-params", "logs", "schedules"];
-  const secondaryActions = ["solve", "plot", "inspect"];
+  const secondaryActionNames = ["solve", "plot", "inspect"];
+  const secondaryActionRoutes = ["/solve/config", "/plot/example.log", "/inspect"];
 
   let currentPageIdx = -1;
 
@@ -51,8 +52,8 @@ const DataDetailPage: React.FC<{
             <ListItemSecondaryAction>
               <ButtonGroup variant="contained" color="primary">
                 <Button>Download</Button>
-                <Button>
-                  {secondaryActions[currentPageIdx].toUpperCase()}
+                <Button href={secondaryActionRoutes[currentPageIdx]} >
+                  {secondaryActionNames[currentPageIdx].toUpperCase()}
                 </Button>
               </ButtonGroup>
             </ListItemSecondaryAction>

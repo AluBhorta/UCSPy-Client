@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
           <Link to="/solve/config"> Solve </Link>
         </Grid>
         <Grid item>
-          <Link to="/plot"> Plot </Link>
+          <Link to="/data/logs"> Plot </Link>
         </Grid>
         <Grid item>
           <Link to="/inspect"> Inspect </Link>
