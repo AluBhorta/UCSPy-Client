@@ -55,7 +55,7 @@ const SolveConfigPage: React.FC = () => {
     <div>
       <h1>Configure Solver</h1>
       <hr />
-      <Grid container spacing={4}>
+      <Grid container spacing={4} justify="space-evenly" >
         <Grid item md>
           <Paper>
             <Box padding={2}>
