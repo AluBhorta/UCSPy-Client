@@ -10,69 +10,46 @@ TODO
 
 #### data
 
-sch_params
-
-- listView() == /data/schedule-params
-
-  - show list of: sch_params_names, solveBtn/UseToSolveBtn,
-  - show uploadBtn
-
-- upload()
-
-  - open modal
-  - enter sch_params_name
-  - upload the files (C, I, R, T, CG)
-  - click save
-
-- ~download(sch_param_name) -> return
-- ~delete()
-
-logs
-
-- listView() -> /data/logs
-
-  - show list of: logNames, plotBtn
-  - show uploadBtn
-
-- plot(log_file)
-
-  - get log_file from /plot?log=log_file
-
-- ~upload()
-- ~download(log_name) -> return log_name
-- ~delete()
-
-schedules
-
-- listView() -> /data/schedules
-- inspect(schedule_name) -> /inspect?schedule=schedule_name
-- download(schedule_name) -> return schedule_name
-
-- ~upload()
-- ~delete()
+- sch_params
+- logs
+- schedules
 
 ### solve
 
-makeConfig()
-- returns a UserConfig
+#### `/solve/config`
 
+makeConfig()
+
+- return a UserConfig
 
 solve()
 
-- run Solver.solve(\_config)
-- send UserConfig to SERVER:PORT/api/solve
+- run Solver.solve(userConfig)
+  - which sends UserConfig to `SERVER:PORT/api/solve`
+- redirect to `/solve/run`
+
+#### `/solve/run`
+
+updateProgress()
+
+- on message sent from server: {epoch, fitness}
+- update progress bar (epoch) value and fitness value according to message
 
 stop()
-- run Solver.stop()
+
+- on stop click from UI, send kill signal to server
+
+end()
+
+- on successful end of sovle()
+
+NOTE:
+
+- need to allow user to navigate thru app while a solver is runnning
+- so, when a solver is running, save its state
+- allow mutiple solvers to run
+  - e.g. by making multiple instances of Solver and keeping them in an array
 
 ### plot
 
 ### inspect
-
-go to: /inspect/:scheduleFileName
-
-show 
-- the schedule in table
-- HC and SC violations in a col
-- final fitness
-- download schedule as csv Btn

@@ -8,15 +8,15 @@ const DataRootPage: React.FC = () => {
       <h1>Data</h1>
 
       <List>
-        <ListItem>
-          <Link to="/data/schedule-params">Schedule Params</Link>
-        </ListItem>
-        <ListItem>
-          <Link to="/data/logs">Logs</Link>
-        </ListItem>
-        <ListItem>
-          <Link to="/data/schedules">Schedules</Link>
-        </ListItem>
+        <Link to="/data/schedule-params">
+          <ListItem button>Schedule Params</ListItem>
+        </Link>
+        <Link to="/data/logs">
+          <ListItem button>Logs</ListItem>
+        </Link>
+        <Link to="/data/schedules">
+          <ListItem button>Schedules</ListItem>
+        </Link>
       </List>
     </div>
   );
