@@ -32,7 +32,7 @@ const PlotPage: React.FC<{
     setTimeout(() => {
       // TODO: fetch LogFileData and replace mock data
       logFileData.logFileName = logFileName;
-      logFileData.records = genLogRecords(1000);
+      logFileData.records = genLogRecords(200);
       setLoading(false);
     }, 1000);
 
@@ -66,7 +66,7 @@ const PlotPage: React.FC<{
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
             <Legend />
             <Tooltip />
-            <Line type="monotone" dataKey="fintess" stroke="#82ca9d" />
+            <Line type="monotone" dataKey="fintess" stroke="#82ca9d" dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>
