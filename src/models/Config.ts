@@ -1,3 +1,5 @@
+import { SoftConstraint, HardConstraint } from "./Constraints";
+
 export type UserConfig = {
   scheduleParamName: string;
   constrinats: {
@@ -19,15 +21,8 @@ export type UserConfig = {
 export type ConfigDescription = {
   scheduleParamNames: string[];
   constrinats: {
-    hardConstraints: {
-      id: number;
-      desc: string;
-    }[];
-    softConstraints: {
-      id: number;
-      desc: string;
-      unitPenalty: number;
-    }[];
+    hardConstraints: HardConstraint[];
+    softConstraints: SoftConstraint[];
   };
   fitness: {
     functionNames: string[];
