@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 
 const HomePage: React.FC = () => {
   return (
@@ -8,13 +8,19 @@ const HomePage: React.FC = () => {
       <h1>HomePage</h1>
       <Grid container justify="space-evenly">
         <Grid item>
-          <Link to="/solve/config"> Solve </Link>
+          <Button href="/solve/config" variant="contained" color="primary">
+            Solve
+          </Button>
         </Grid>
         <Grid item>
-          <Link to="/data/logs"> Plot </Link>
+          <Button href="/data/logs" variant="contained" color="primary">
+            Plot
+          </Button>
         </Grid>
         <Grid item>
-          <Link to="/inspect"> Inspect </Link>
+          <Button href="/inspect" variant="contained" color="primary">
+            Inspect
+          </Button>
         </Grid>
       </Grid>
     </div>

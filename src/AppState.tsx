@@ -5,6 +5,12 @@ const AppContext = createContext({
   solver: new Solver(),
 });
 
+export enum dataPageNames {
+  "schedule-params" = 0,
+  "logs" = 1,
+  "schedules" = 2,
+}
+
 const AppState: React.FC = ({ children }) => {
   const appSolver = new Solver();
 

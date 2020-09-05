@@ -44,15 +44,7 @@ const AppRoutes: React.FC = () => {
           <DataRootPage />
         </Route>
         <Route path="/data/:pageName" exact>
-          {({ match }) =>
-            ["schedule-params", "logs", "schedules"].includes(
-              match?.params.pageName
-            ) ? (
-              <DataDetailPage pageName={match?.params.pageName} />
-            ) : (
-              <Error404Page />
-            )
-          }
+          {({ match }) => <DataDetailPage pageName={match?.params.pageName} />}
         </Route>
 
         <Route path="*">

@@ -8,13 +8,19 @@ import {
   ListItemSecondaryAction,
   ButtonGroup,
 } from "@material-ui/core";
+import UploadDataModal from "../components/UploadDataModal";
+import { dataPageNames } from "../AppState";
 
 const DataDetailPage: React.FC<{
   pageName: string;
 }> = ({ pageName }) => {
-  const pageNames = ["schedule-params", "logs", "schedules"];
   const secondaryActionNames = ["solve", "plot", "inspect"];
-  const secondaryActionRoutes = ["/solve/config", "/plot/example.log", "/inspect/example.csv"];
+  const secondaryActionRoutes = [
+    "/solve/config",
+    "/plot/example.log",
+    "/inspect/example.csv",
+  ];
+  const [openUploadModal, setOpenUploadModal] = useState(false);
 
   let currentPageIdx = -1;
 
@@ -26,13 +32,13 @@ const DataDetailPage: React.FC<{
   ]);
 
   switch (pageName) {
-    case pageNames[0]:
+    case dataPageNames[0]:
       currentPageIdx = 0;
       break;
-    case pageNames[1]:
+    case dataPageNames[1]:
       currentPageIdx = 1;
       break;
-    case pageNames[2]:
+    case dataPageNames[2]:
       currentPageIdx = 2;
       break;
     default:
@@ -42,7 +48,11 @@ const DataDetailPage: React.FC<{
   return (
     <div>
       <h1>Data: {pageName.toUpperCase()}</h1>
-      <Button variant="contained" color="primary">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setOpenUploadModal(true)}
+      >
         Upload New
       </Button>
       <List>
@@ -52,7 +62,7 @@ const DataDetailPage: React.FC<{
             <ListItemSecondaryAction>
               <ButtonGroup variant="contained" color="primary">
                 <Button>Download</Button>
-                <Button href={secondaryActionRoutes[currentPageIdx]} >
+                <Button href={secondaryActionRoutes[currentPageIdx]}>
                   {secondaryActionNames[currentPageIdx].toUpperCase()}
                 </Button>
               </ButtonGroup>
@@ -60,6 +70,11 @@ const DataDetailPage: React.FC<{
           </ListItem>
         ))}
       </List>
+      <UploadDataModal
+        pageName={pageName}
+        isOpen={openUploadModal}
+        setIsOpen={setOpenUploadModal}
+      />
     </div>
   );
 };
