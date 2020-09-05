@@ -4,7 +4,7 @@ Client Web App for UCSPy-Engine.
 
 ## Usage
 
-...
+TODO
 
 ## Requirements
 
@@ -68,3 +68,11 @@ stop()
 ### plot
 
 ### inspect
+
+go to: /inspect/:scheduleFileName
+
+show 
+- the schedule in table
+- HC and SC violations in a col
+- final fitness
+- download schedule as csv Btn

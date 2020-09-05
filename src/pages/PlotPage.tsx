@@ -37,7 +37,7 @@ const PlotPage: React.FC<{
     }, 1000);
 
     return () => {};
-  }, []);
+  }, [logFileName]);
 
   if (loading) {
     return (

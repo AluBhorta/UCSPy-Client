@@ -23,17 +23,21 @@ const AppRoutes: React.FC = () => {
         <Route path="/solve/run" exact>
           <SolveRunPage />
         </Route>
-        
+
         <Route path="/plot" exact>
           <Redirect to="/data/logs" />
         </Route>
-
         <Route path="/plot/:logFileName" exact>
           {({ match }) => <PlotPage logFileName={match?.params.logFileName} />}
         </Route>
 
         <Route path="/inspect" exact>
-          <InspectPage />
+          <Redirect to="/data/schedules" />
+        </Route>
+        <Route path="/inspect/:scheduleFileName" exact>
+          {({ match }) => (
+            <InspectPage scheduleFileName={match?.params.scheduleFileName} />
+          )}
         </Route>
 
         <Route path="/data" exact>

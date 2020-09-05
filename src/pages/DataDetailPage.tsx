@@ -14,7 +14,7 @@ const DataDetailPage: React.FC<{
 }> = ({ pageName }) => {
   const pageNames = ["schedule-params", "logs", "schedules"];
   const secondaryActionNames = ["solve", "plot", "inspect"];
-  const secondaryActionRoutes = ["/solve/config", "/plot/example.log", "/inspect"];
+  const secondaryActionRoutes = ["/solve/config", "/plot/example.log", "/inspect/example.csv"];
 
   let currentPageIdx = -1;
 
