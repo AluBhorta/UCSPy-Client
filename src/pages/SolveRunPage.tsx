@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Button, LinearProgress } from "@material-ui/core";
+import { AppContext } from "../AppState";
+import Error404Page from "./Error404Page";
+import { Solver } from "../models/Solver";
 
-const SolveRunPage: React.FC = () => {
+const SolveRunPage: React.FC<{ id: string }> = ({ id }) => {
+  const { getSolver } = useContext(AppContext);
   const [currentEpoch, setCurrentEpoch] = useState(10);
   const [currentFitness, setCurrentFitness] = useState(0.8);
+  const [solver, setSolver] = useState<Solver | undefined>(undefined);
+
+  useEffect(() => {
+    setSolver(getSolver(id));
+    return () => {};
+  }, [id]);
+
+  if (solver === undefined) {
+    return <Error404Page />;
+  }
 
   return (
     <div>
-      <h1>SolveRunPage</h1>
+      <h1>{solver.getStatus()} </h1>
+      <p>Solver id: {id}</p>
 
       <LinearProgress variant="indeterminate" value={currentEpoch} />
       <p>Current epoch: {currentEpoch}</p>

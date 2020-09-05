@@ -1,9 +1,6 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 import { Solver } from "./models/Solver";
-
-const AppContext = createContext({
-  solver: new Solver(),
-});
+import { UserConfig } from "./models/Config";
 
 export enum dataPageNames {
   "schedule-params" = 0,
@@ -11,14 +8,46 @@ export enum dataPageNames {
   "schedules" = 2,
 }
 
+export const AppContext = createContext<{
+  createNewSolver: (id: string, _config: UserConfig) => Solver;
+  getSolver: (id: string) => Solver | undefined;
+  getAllSolvers: () => Solver[];
+  deleteSolver: (id: string) => void;
+}>({
+  createNewSolver: (id: string, _config: UserConfig) => new Solver(id, _config),
+  getSolver: (id: string) => undefined,
+  getAllSolvers: () => [],
+  deleteSolver: (id: string) => {},
+});
+
 const AppState: React.FC = ({ children }) => {
-  const appSolver = new Solver();
+  const [solvers, setSolvers] = useState<Solver[]>([]);
+
+  const createNewSolver = (id: string, _config: UserConfig) => {
+    const solver = new Solver(id, _config);
+    setSolvers([...solvers, solver]);
+    return solver;
+  };
+
+  const getSolver = (id: string) => {
+    return solvers.find((s) => s.getId() === id);
+  };
+
+  const getAllSolvers = () => solvers;
+
+  const deleteSolver = (id: string) => {
+    const _solvers = solvers.filter((s) => s.getId() !== id);
+    setSolvers(_solvers);
+  };
 
   return (
     <>
-      <AppContext.Provider value={{ solver: appSolver }}>
-        {children}
-      </AppContext.Provider>
+      <AppContext.Provider value={{
+        createNewSolver,
+        getSolver,
+        getAllSolvers,
+        deleteSolver,
+      }}>{children}</AppContext.Provider>
     </>
   );
 };

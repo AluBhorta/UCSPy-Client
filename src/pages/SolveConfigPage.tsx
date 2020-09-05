@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { UserConfig, ConfigDescription } from "../models/Config";
 import {
   Grid,
@@ -17,8 +17,13 @@ import {
   Divider,
   ListItemIcon,
 } from "@material-ui/core";
+import { getUUID } from "../util/Util";
+import { AppContext } from "../AppState";
+import { useHistory } from "react-router-dom";
 
 const SolveConfigPage: React.FC = () => {
+  const { createNewSolver } = useContext(AppContext);
+  const history = useHistory();
   const [userConfig, setUserConfig] = useState<UserConfig>({
     scheduleParamName: "",
     fitness: {
@@ -50,6 +55,13 @@ const SolveConfigPage: React.FC = () => {
   //   // fetch latest configDesc using ApiClient
   //   return () => {};
   // }, []);
+
+  const handleRunClick = () => {
+    const id = getUUID();
+    console.log(id);
+    createNewSolver(id, userConfig).solve();
+    history.push(`/solve/run/${id}`);
+  };
 
   return (
     <div>
@@ -237,7 +249,7 @@ const SolveConfigPage: React.FC = () => {
           size="large"
           variant="contained"
           color="secondary"
-          href="/solve/run"
+          onClick={() => handleRunClick()}
         >
           RUN!
         </Button>

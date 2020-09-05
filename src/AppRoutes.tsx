@@ -20,8 +20,8 @@ const AppRoutes: React.FC = () => {
         <Route path="/solve/config" exact>
           <SolveConfigPage />
         </Route>
-        <Route path="/solve/run" exact>
-          <SolveRunPage />
+        <Route path="/solve/run/:id" exact>
+          {({ match }) => <SolveRunPage id={match?.params.id} />}
         </Route>
 
         <Route path="/plot" exact>
