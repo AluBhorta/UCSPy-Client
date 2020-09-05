@@ -55,23 +55,23 @@ const SolveConfigPage: React.FC = () => {
     <div>
       <h1>Configure Solver</h1>
       <hr />
-      <Grid container spacing={4} justify="space-evenly" >
+      <Grid container spacing={4} justify="space-evenly">
         <Grid item md>
           <Paper>
             <Box padding={2}>
               <h2>Schedle Param</h2>
               <div>
                 <FormControl>
-                  <FormLabel>Select from existing.</FormLabel>
+                  <FormLabel>Select existing Schedle Param</FormLabel>
                   <Select
                     id="scheduleParamInput"
-                    value={10}
+                    value={1}
                     // onChange={handleChange}
                   >
                     {/* MOCK */}
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={1}>IUB CSE Summer 2020</MenuItem>
+                    <MenuItem value={2}>IUB CSE Autumn 2020</MenuItem>
+                    <MenuItem value={3}>IUB CSE Autumn 2019</MenuItem>
                     {configDesc.scheduleParamNames.map(
                       (scheduleParamName, idx) => (
                         <MenuItem key={idx} value={scheduleParamName}>
@@ -87,7 +87,6 @@ const SolveConfigPage: React.FC = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  component="span"
                   onClick={() => {
                     // should open up modal to upload each indi scheduleParam file
                     // show examples of file format
@@ -238,7 +237,7 @@ const SolveConfigPage: React.FC = () => {
           size="large"
           variant="contained"
           color="secondary"
-          component="span"
+          href="/solve/run"
         >
           RUN!
         </Button>

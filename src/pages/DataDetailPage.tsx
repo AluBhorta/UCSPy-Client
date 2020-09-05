@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Error404Page from "./Error404Page";
 import {
   List,
@@ -21,15 +21,20 @@ const DataDetailPage: React.FC<{
     "/inspect/example.csv",
   ];
   const [openUploadModal, setOpenUploadModal] = useState(false);
+  const [listItems, setListItems] = useState<string[]>([]);
 
   let currentPageIdx = -1;
 
-  const [listItems, setListItems] = useState<string[]>([
-    "Hello",
-    "TS",
-    "is",
-    "cool",
-  ]);
+  useEffect(() => {
+    setListItems([
+      "IUB CSE Summer 2020",
+      "IUB CSE Autumn 2020",
+      "IUB CSE Autumn 2019",
+      "This is just static data",
+      "Calm down",
+    ]);
+    return () => {};
+  }, [pageName]);
 
   switch (pageName) {
     case dataPageNames[0]:
