@@ -1,15 +1,16 @@
 import { UserConfig } from "./Config";
 
-export type SolverStatus = "RUNNING" | "STOPPED";
+export type SolverStatus = "INITIALIZED" | "RUNNING" | "TERMINATED";
 
 export class Solver {
-  private status: SolverStatus = "STOPPED";
+  private status: SolverStatus;
   private id: string;
   private userConfig: UserConfig;
 
   constructor(id: string, _config: UserConfig) {
     this.id = id;
     this.userConfig = _config;
+    this.status = "INITIALIZED";
   }
 
   getId = () => this.id;
@@ -21,8 +22,8 @@ export class Solver {
     console.log("running...");
     setTimeout(() => {
       console.log("simulating end of run...");
-      this.status = "STOPPED";
-    }, 1500);
+      this.status = "TERMINATED";
+    }, 5000);
     /* TODO
     open connection to engine and send userConfig
     keep receiving progress {epoch, fitness}
@@ -34,7 +35,7 @@ export class Solver {
     console.log("stopping...");
     setTimeout(() => {
       console.log("simulating stop...");
-      this.status = "STOPPED";
+      this.status = "TERMINATED";
     }, 1500);
     // TODO
     // on 'stop', send kill signal and return: {fitness, scheduleName, logName, timeTaken}
