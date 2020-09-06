@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Error404Page: React.FC<{
   message?: string;
@@ -9,7 +10,7 @@ const Error404Page: React.FC<{
       {message ? <h3>{message}</h3> : <h3>Page not found!</h3>}
 
       <p>
-        If you are lost, go <a href="/">Home</a>.
+        If you are lost, go <Link to="/">Home</Link> .
       </p>
     </div>
   );

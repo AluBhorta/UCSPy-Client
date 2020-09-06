@@ -1,13 +1,37 @@
 import React from "react";
+import {
+  Button,
+  ButtonGroup,
+  AppBar,
+  Toolbar,
+  Box,
+} from "@material-ui/core";
+
 import { Link } from "react-router-dom";
 
 const AppHeader: React.FC = () => {
   return (
-    <div>
-      <h1>AppHeader</h1>
-      <Link to="/"> Home </Link>
-      <Link to="/data"> Data </Link>
-    </div>
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <Box marginRight={6}>
+            <h2>UCSPy</h2>
+          </Box>
+
+          <ButtonGroup variant="contained" color="primary">
+            <Link to="/">
+              <Button style={{ color: "#fff" }}>Home</Button>
+            </Link>
+            <Link to="/data">
+              <Button style={{ color: "#fff" }}>Data</Button>
+            </Link>
+            <Link to="/solvers">
+              <Button style={{ color: "#fff" }}>Solvers</Button>
+            </Link>
+          </ButtonGroup>
+        </Toolbar>
+      </AppBar>
+    </>
   );
 };
 

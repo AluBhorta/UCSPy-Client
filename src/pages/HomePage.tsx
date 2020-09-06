@@ -8,19 +8,25 @@ const HomePage: React.FC = () => {
       <h1>HomePage</h1>
       <Grid container justify="space-evenly">
         <Grid item>
-          <Button href="/solve/config" variant="contained" color="primary">
-            Solve
-          </Button>
+          <Link to="/solve/config">
+            <Button variant="contained" color="primary">
+              Solve
+            </Button>
+          </Link>
         </Grid>
         <Grid item>
-          <Button href="/data/logs" variant="contained" color="primary">
-            Plot
-          </Button>
+          <Link to="/data/logs">
+            <Button variant="contained" color="primary">
+              Plot
+            </Button>
+          </Link>
         </Grid>
         <Grid item>
-          <Button href="/inspect" variant="contained" color="primary">
-            Inspect
-          </Button>
+          <Link to="/inspect">
+            <Button variant="contained" color="primary">
+              Inspect
+            </Button>
+          </Link>
         </Grid>
       </Grid>
     </div>

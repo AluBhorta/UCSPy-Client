@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import UploadDataModal from "../components/UploadDataModal";
 import { dataPageNames } from "../AppState";
+import { Link } from "react-router-dom";
 
 const DataDetailPage: React.FC<{
   pageName: string;
@@ -67,9 +68,11 @@ const DataDetailPage: React.FC<{
             <ListItemSecondaryAction>
               <ButtonGroup variant="contained" color="primary">
                 <Button>Download</Button>
-                <Button href={secondaryActionRoutes[currentPageIdx]}>
-                  {secondaryActionNames[currentPageIdx].toUpperCase()}
-                </Button>
+                <Link to={secondaryActionRoutes[currentPageIdx]}>
+                  <Button>
+                    {secondaryActionNames[currentPageIdx].toUpperCase()}
+                  </Button>
+                </Link>
               </ButtonGroup>
             </ListItemSecondaryAction>
           </ListItem>

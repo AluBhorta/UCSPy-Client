@@ -8,6 +8,7 @@ import DataRootPage from "./pages/DataRootPage";
 import SolveRunPage from "./pages/SolveRunPage";
 import Error404Page from "./pages/Error404Page";
 import DataDetailPage from "./pages/DataDetailPage";
+import AllSolversPage from "./pages/AllSolversPage";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -17,6 +18,9 @@ const AppRoutes: React.FC = () => {
           <HomePage />
         </Route>
 
+        <Route path="/solvers" exact>
+          <AllSolversPage />
+        </Route>
         <Route path="/solve/config" exact>
           <SolveConfigPage />
         </Route>
