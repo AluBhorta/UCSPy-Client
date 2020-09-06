@@ -1,6 +1,7 @@
 import React, { createContext, useState } from "react";
 import { Solver } from "./models/Solver";
 import { UserConfig } from "./models/Config";
+import { getUUID } from "./util/Util";
 
 export enum dataPageNames {
   "schedule-params" = 0,
@@ -9,12 +10,12 @@ export enum dataPageNames {
 }
 
 export const AppContext = createContext<{
-  createNewSolver: (id: string, _config: UserConfig) => Solver;
+  createNewSolver: (_config: UserConfig) => Solver;
   getSolver: (id: string) => Solver | undefined;
   getAllSolvers: () => Solver[];
   deleteSolver: (id: string) => void;
 }>({
-  createNewSolver: (id: string, _config: UserConfig) => new Solver(id, _config),
+  createNewSolver: (_config: UserConfig) => new Solver("0", _config),
   getSolver: (id: string) => undefined,
   getAllSolvers: () => [],
   deleteSolver: (id: string) => {},
@@ -23,7 +24,8 @@ export const AppContext = createContext<{
 const AppState: React.FC = ({ children }) => {
   const [solvers, setSolvers] = useState<Solver[]>([]);
 
-  const createNewSolver = (id: string, _config: UserConfig) => {
+  const createNewSolver = (_config: UserConfig) => {
+    const id = getUUID();
     const solver = new Solver(id, _config);
     setSolvers([...solvers, solver]);
     return solver;

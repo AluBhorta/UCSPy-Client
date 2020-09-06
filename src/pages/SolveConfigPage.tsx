@@ -17,7 +17,6 @@ import {
   Divider,
   ListItemIcon,
 } from "@material-ui/core";
-import { getUUID } from "../util/Util";
 import { AppContext } from "../AppState";
 import { useHistory } from "react-router-dom";
 
@@ -57,10 +56,9 @@ const SolveConfigPage: React.FC = () => {
   // }, []);
 
   const handleRunClick = () => {
-    const id = getUUID();
-    console.log(id);
-    createNewSolver(id, userConfig).solve();
-    history.push(`/solve/run/${id}`);
+    const solver = createNewSolver(userConfig)
+    solver.solve()
+    history.push(`/solve/run/${solver.getId()}`);
   };
 
   return (
