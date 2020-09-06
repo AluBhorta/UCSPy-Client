@@ -13,7 +13,7 @@ const InspectPage: React.FC<{
     fitness: 0,
     schedule: { classes: [] },
     violations: [],
-    constrinats: {
+    constraints: {
       hardConstraints: [],
       softConstraints: [],
     },

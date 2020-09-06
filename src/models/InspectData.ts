@@ -10,7 +10,7 @@ export type InspectData = {
   fitness: number;
   schedule: Schedule;
   violations: ConstraintViolationsOfClass[];
-  constrinats: {
+  constraints: {
     hardConstraints: HardConstraint[];
     softConstraints: SoftConstraint[];
   };

@@ -5,7 +5,7 @@ import { Grid, Button } from "@material-ui/core";
 const HomePage: React.FC = () => {
   return (
     <div>
-      <h1>HomePage</h1>
+      <h1>Home</h1>
       <Grid container justify="space-evenly">
         <Grid item>
           <Link to="/solve/config">

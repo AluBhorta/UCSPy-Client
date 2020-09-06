@@ -2,6 +2,17 @@ import { UserConfig } from "./Config";
 
 export type SolverStatus = "INITIALIZED" | "RUNNING" | "TERMINATED";
 
+export type SolverProgressUpdate = {
+  epoch: string;
+  fitness: number;
+};
+
+export type SolverTerminationResult = {
+  timeTakenInSeconds: number;
+  scheduleFileName: string;
+  logFileName: string;
+};
+
 export class Solver {
   private status: SolverStatus;
   private id: string;
@@ -17,7 +28,7 @@ export class Solver {
   getStatus = () => this.status;
   getConfig = () => this.userConfig;
 
-  solve = (_config?: UserConfig) => {
+  solve = () => {
     this.status = "RUNNING";
     console.log("running...");
     setTimeout(() => {
@@ -26,15 +37,15 @@ export class Solver {
     }, 5000);
     /* TODO
     open connection to engine and send userConfig
-    keep receiving progress {epoch, fitness}
-    on 'complete' return: {fitness, scheduleName, logName, timeTaken}
+    keep receiving `SolverProgressUpdate`
+    on 'complete' return `SolverTerminationResult`
     */
   };
 
   stop = () => {
     console.log("stopping...");
     setTimeout(() => {
-      console.log("simulating stop...");
+      console.log("completing stop...");
       this.status = "TERMINATED";
     }, 1500);
     // TODO

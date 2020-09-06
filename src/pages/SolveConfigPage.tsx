@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-import { UserConfig, ConfigDescription } from "../models/Config";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Grid,
   Paper,
@@ -16,20 +15,30 @@ import {
   FormLabel,
   Divider,
   ListItemIcon,
+  CircularProgress,
 } from "@material-ui/core";
-import { AppContext } from "../AppState";
 import { useHistory } from "react-router-dom";
+
+import { UserConfig, ConfigDescription } from "../models/Config";
+import { AppContext } from "../AppState";
+import DataApiClient from "../api/DataApiClient";
+import UploadDataModal from "../components/UploadDataModal";
+import { dataPageNames } from "../AppState";
 
 const SolveConfigPage: React.FC = () => {
   const { createNewSolver } = useContext(AppContext);
   const history = useHistory();
+
+  const [loading, setLoading] = useState(true);
+  const [openUploadModal, setOpenUploadModal] = useState(false);
+
   const [userConfig, setUserConfig] = useState<UserConfig>({
     scheduleParamName: "",
     fitness: {
       use: "",
       minAcceptableFitness: 0,
     },
-    constrinats: {
+    constraints: {
       softConstraints: [],
       hardConstraints: [],
     },
@@ -44,22 +53,67 @@ const SolveConfigPage: React.FC = () => {
     fitness: {
       functionNames: [],
     },
-    constrinats: {
+    constraints: {
       hardConstraints: [],
       softConstraints: [],
     },
   });
 
-  // useEffect(() => {
-  //   // fetch latest configDesc using ApiClient
-  //   return () => {};
-  // }, []);
+  const dataApiClient = new DataApiClient();
+
+  useEffect(() => {
+    dataApiClient
+      .getConfigDescription()
+      .then((cd: ConfigDescription) => {
+        setConfigDesc(cd);
+
+        setUserConfig({
+          ...userConfig,
+          constraints: {
+            hardConstraints: cd.constraints.hardConstraints.map((hc) => ({
+              id: hc.id,
+            })),
+            softConstraints: cd.constraints.softConstraints.map((sc) => ({
+              id: sc.id,
+              unitPenalty: sc.unitPenalty,
+            })),
+          },
+          scheduleParamName:
+            cd.scheduleParamNames.length > 0 ? cd.scheduleParamNames[0] : "",
+          algorithm:
+            cd.algorithm.algorithmNames.length > 0
+              ? cd.algorithm.algorithmNames[0]
+              : "",
+          fitness: {
+            use:
+              cd.fitness.functionNames.length > 0
+                ? cd.fitness.functionNames[0]
+                : "",
+            minAcceptableFitness: 0,
+          },
+        });
+
+        setLoading(false);
+      })
+
+      .catch((e) => console.error(e));
+    return () => {};
+  }, []);
 
   const handleRunClick = () => {
-    const solver = createNewSolver(userConfig)
-    solver.solve()
+    const solver = createNewSolver(userConfig);
+    solver.solve();
     history.push(`/solve/run/${solver.getId()}`);
   };
+
+  if (loading) {
+    return (
+      <div>
+        <p>Loading...</p>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -75,13 +129,17 @@ const SolveConfigPage: React.FC = () => {
                   <FormLabel>Select existing Schedle Param</FormLabel>
                   <Select
                     id="scheduleParamInput"
-                    value={1}
-                    // onChange={handleChange}
+                    value={userConfig.scheduleParamName}
+                    required
+                    onChange={(e) => {
+                      if (typeof e.target.value === "string") {
+                        setUserConfig({
+                          ...userConfig,
+                          scheduleParamName: e.target.value,
+                        });
+                      }
+                    }}
                   >
-                    {/* MOCK */}
-                    <MenuItem value={1}>IUB CSE Summer 2020</MenuItem>
-                    <MenuItem value={2}>IUB CSE Autumn 2020</MenuItem>
-                    <MenuItem value={3}>IUB CSE Autumn 2019</MenuItem>
                     {configDesc.scheduleParamNames.map(
                       (scheduleParamName, idx) => (
                         <MenuItem key={idx} value={scheduleParamName}>
@@ -97,10 +155,7 @@ const SolveConfigPage: React.FC = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => {
-                    // should open up modal to upload each indi scheduleParam file
-                    // show examples of file format
-                  }}
+                  onClick={() => setOpenUploadModal(true)}
                 >
                   Upload
                 </Button>
@@ -119,12 +174,21 @@ const SolveConfigPage: React.FC = () => {
 
                   <Select
                     id="fitnessInput"
-                    value={1}
-                    // onChange={handleChange}
+                    value={userConfig.fitness.use}
+                    required
+                    onChange={(e) => {
+                      if (typeof e.target.value === "string") {
+                        setUserConfig({
+                          ...userConfig,
+                          fitness: {
+                            use: e.target.value,
+                            minAcceptableFitness:
+                              userConfig.fitness.minAcceptableFitness,
+                          },
+                        });
+                      }
+                    }}
                   >
-                    {/* MOCK */}
-                    <MenuItem value={1}>Tanh</MenuItem>
-                    <MenuItem value={2}>Expo</MenuItem>
                     {configDesc.fitness.functionNames.map((fName, idx) => (
                       <MenuItem key={idx} value={fName}>
                         {fName}
@@ -140,10 +204,13 @@ const SolveConfigPage: React.FC = () => {
                   <Slider
                     min={0}
                     max={1}
-                    defaultValue={0.5}
+                    defaultValue={userConfig.fitness.minAcceptableFitness}
                     aria-labelledby="discrete-slider-always"
                     step={0.001}
                     valueLabelDisplay="auto"
+                    onChange={(e) => {
+                      // TODO: change userConfig
+                    }}
                   />
                 </FormControl>
               </div>
@@ -159,12 +226,17 @@ const SolveConfigPage: React.FC = () => {
                 <FormLabel>Select algorithm.</FormLabel>
                 <Select
                   id="algorithmInput"
-                  value={1}
-                  // onChange={handleChange}
+                  value={userConfig.algorithm}
+                  required
+                  onChange={(e) => {
+                    if (typeof e.target.value === "string") {
+                      setUserConfig({
+                        ...userConfig,
+                        algorithm: e.target.value,
+                      });
+                    }
+                  }}
                 >
-                  {/* MOCK */}
-                  <MenuItem value={1}>Genetic Algorithm</MenuItem>
-                  <MenuItem value={2}>Memetic Algorithm</MenuItem>
                   {configDesc.algorithm.algorithmNames.map((aName, idx) => (
                     <MenuItem key={idx} value={aName}>
                       {aName}
@@ -187,23 +259,47 @@ const SolveConfigPage: React.FC = () => {
                 <h3>Hard Constraints</h3>
                 <List>
                   <FormControl>
-                    {/* MOCK */}
-                    {[1, 2].map((i) => (
+                    {configDesc.constraints.hardConstraints.map((hc, i) => (
                       <ListItem key={i}>
                         <ListItemIcon>
-                          <Checkbox />
+                          <Checkbox
+                            checked={
+                              userConfig.constraints.hardConstraints.filter(
+                                (_hc) => hc.id === _hc.id
+                              ).length > 0
+                            }
+                            onChange={(e) => {
+                              if (e.target.checked === false) {
+                                setUserConfig({
+                                  ...userConfig,
+                                  constraints: {
+                                    hardConstraints: userConfig.constraints.hardConstraints.filter(
+                                      (_hc) => _hc.id !== hc.id
+                                    ),
+                                    softConstraints:
+                                      userConfig.constraints.softConstraints,
+                                  },
+                                });
+                              } else {
+                                setUserConfig({
+                                  ...userConfig,
+                                  constraints: {
+                                    hardConstraints: [
+                                      ...userConfig.constraints.hardConstraints,
+                                      { id: hc.id },
+                                    ],
+                                    softConstraints:
+                                      userConfig.constraints.softConstraints,
+                                  },
+                                });
+                              }
+                            }}
+                          />
                         </ListItemIcon>
                         <ListItemText
-                          primary={`Hard Constraint ${i}`}
-                          secondary="Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Perferendis repellendus, vitae eos,"
+                          primary={`Hard Constraint ${hc.id}`}
+                          secondary={hc.desc}
                         />
-                      </ListItem>
-                    ))}
-                    {configDesc.constrinats.hardConstraints.map((hc) => (
-                      <ListItem key={hc.id}>
-                        <ListItemText primary={hc.id} secondary={hc.desc} />
-                        <Checkbox />
                       </ListItem>
                     ))}
                   </FormControl>
@@ -213,29 +309,71 @@ const SolveConfigPage: React.FC = () => {
               <div>
                 <h3>Soft Constraints</h3>
                 <List>
-                  <FormControl>
-                    {/* MOCK */}
-                    {[1, 2, 3, 4].map((i) => (
-                      <ListItem key={i}>
-                        <ListItemIcon>
-                          <Checkbox />
-                        </ListItemIcon>
+                  {configDesc.constraints.softConstraints.map((sc, i) => (
+                    <ListItem key={i}>
+                      <ListItemIcon>
+                        <FormControl>
+                          <Checkbox
+                            checked={
+                              userConfig.constraints.softConstraints.filter(
+                                (_sc) => sc.id === _sc.id
+                              ).length > 0
+                            }
+                            onChange={(e) => {
+                              if (e.target.checked === false) {
+                                setUserConfig({
+                                  ...userConfig,
+                                  constraints: {
+                                    softConstraints: userConfig.constraints.softConstraints.filter(
+                                      (_sc) => _sc.id !== sc.id
+                                    ),
+                                    hardConstraints:
+                                      userConfig.constraints.hardConstraints,
+                                  },
+                                });
+                              } else {
+                                setUserConfig({
+                                  ...userConfig,
+                                  constraints: {
+                                    softConstraints: [
+                                      ...userConfig.constraints.softConstraints,
+                                      {
+                                        id: sc.id,
+                                        unitPenalty: sc.unitPenalty,
+                                      },
+                                    ],
+                                    hardConstraints:
+                                      userConfig.constraints.hardConstraints,
+                                  },
+                                });
+                              }
+                            }}
+                          />
+                        </FormControl>
+                      </ListItemIcon>
+                      <Box width="60%" maxWidth="80%">
                         <ListItemText
-                          primary={`Soft Constraint ${i}`}
-                          secondary="Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, itaque veritatis ullam facere obcaecati assumenda distinctio ratione eius ?"
+                          primary={`Soft Constraint ${sc.id}`}
+                          secondary={sc.desc}
                         />
-                        <FormLabel>Penalty</FormLabel>
+                      </Box>
+                      <FormLabel>Penalty</FormLabel>
+
+                      <Box width="20%">
                         <Slider
                           min={0}
                           max={1}
-                          defaultValue={0.5}
+                          defaultValue={sc.unitPenalty}
                           aria-labelledby="discrete-slider-always"
                           step={0.001}
                           valueLabelDisplay="auto"
+                          onChange={(e) => {
+                            // TODO: change userConfig
+                          }}
                         />
-                      </ListItem>
-                    ))}
-                  </FormControl>
+                      </Box>
+                    </ListItem>
+                  ))}
                 </List>
               </div>
             </Box>
@@ -252,6 +390,20 @@ const SolveConfigPage: React.FC = () => {
           RUN!
         </Button>
       </Box>
+
+      <UploadDataModal
+        pageName={dataPageNames[0]}
+        isOpen={openUploadModal}
+        setIsOpen={setOpenUploadModal}
+        onSave={(nameValue: string) => {
+          setConfigDesc({
+            ...configDesc,
+            scheduleParamNames: [...configDesc.scheduleParamNames, nameValue],
+          });
+
+          setUserConfig({ ...userConfig, scheduleParamName: nameValue });
+        }}
+      />
     </div>
   );
 };

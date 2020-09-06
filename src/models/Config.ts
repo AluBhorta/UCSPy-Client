@@ -2,7 +2,7 @@ import { SoftConstraint, HardConstraint } from "./Constraints";
 
 export type UserConfig = {
   scheduleParamName: string;
-  constrinats: {
+  constraints: {
     hardConstraints: {
       id: number
     }[];
@@ -20,7 +20,7 @@ export type UserConfig = {
 
 export type ConfigDescription = {
   scheduleParamNames: string[];
-  constrinats: {
+  constraints: {
     hardConstraints: HardConstraint[];
     softConstraints: SoftConstraint[];
   };

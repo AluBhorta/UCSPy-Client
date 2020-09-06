@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import {
@@ -41,9 +41,11 @@ const UploadDataModal: React.FC<{
   pageName: string;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ pageName, isOpen, setIsOpen }) => {
+  onSave?: Function | undefined;
+}> = ({ pageName, isOpen, setIsOpen, onSave }) => {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
+  const [nameValue, setNameValue] = useState("");
 
   const listItems: string[] = [];
 
@@ -75,10 +77,16 @@ const UploadDataModal: React.FC<{
           <h2 id="simple-modal-title">Upload {pageName.toUpperCase()}</h2>
           <p id="simple-modal-description"></p>
 
-          <div>
+          <form>
             <List>
               <ListItem>
-                <TextField variant="outlined" label="Name" required />
+                <TextField
+                  variant="outlined"
+                  label="Name"
+                  required
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                />
               </ListItem>
               {listItems.map((item, idx) => (
                 <ListItem key={idx}>
@@ -89,12 +97,18 @@ const UploadDataModal: React.FC<{
                 </ListItem>
               ))}
             </List>
-          </div>
+          </form>
           <Box textAlign="center">
             <Button
               variant="contained"
               color="primary"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                if (onSave !== undefined) {
+                  onSave(nameValue);
+                }
+                setNameValue("");
+              }}
             >
               Save
             </Button>
