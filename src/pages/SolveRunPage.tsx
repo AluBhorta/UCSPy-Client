@@ -24,7 +24,7 @@ const SolveRunPage: React.FC<{ id: string }> = ({ id }) => {
       <h1>{solver.getStatus()} </h1>
       <p>Solver id: {id}</p>
 
-      <LinearProgress variant="indeterminate" value={currentEpoch+1} />
+      <LinearProgress variant="indeterminate" value={currentEpoch + 1} />
       <p>Current epoch: {currentEpoch}</p>
       <p>Current Fitness: {currentFitness}</p>
 

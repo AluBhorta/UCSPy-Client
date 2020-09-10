@@ -20,13 +20,12 @@ import {
 import { useHistory } from "react-router-dom";
 
 import { UserConfig, ConfigDescription } from "../models/Config";
-import { AppContext } from "../AppState";
 import DataApiClient from "../api/DataApiClient";
 import UploadDataModal from "../components/UploadDataModal";
 import { dataPageNames } from "../models/DataPage";
+import SolverApiClient from "../api/SovlerApiClient";
 
 const SolveConfigPage: React.FC = () => {
-  const { createNewSolver } = useContext(AppContext);
   const history = useHistory();
 
   const [loading, setLoading] = useState(true);
@@ -101,9 +100,16 @@ const SolveConfigPage: React.FC = () => {
   }, []);
 
   const handleRunClick = () => {
-    const solver = createNewSolver(userConfig);
-    solver.solve();
-    history.push(`/solve/run/${solver.getId()}`);
+    const solverApiClient = new SolverApiClient();
+    // const solverApiClient = new SolverApiClient();
+    solverApiClient.runSolver(userConfig);
+
+    // history.push(`/solve/run/${solver.getId()}`);
+  };
+
+  const handleStopClick = () => {
+    const solverApiClient = new SolverApiClient();
+    solverApiClient.stopSolver("21");
   };
 
   if (loading) {
@@ -388,6 +394,14 @@ const SolveConfigPage: React.FC = () => {
           onClick={() => handleRunClick()}
         >
           RUN!
+        </Button>
+
+        <Button
+          size="large"
+          variant="contained"
+          onClick={() => handleStopClick()}
+        >
+          TMP STOP
         </Button>
       </Box>
 

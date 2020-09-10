@@ -4,12 +4,12 @@ import { UserConfig } from "./models/Config";
 import { getUUID } from "./util/Util";
 
 export const AppContext = createContext<{
-  createNewSolver: (_config: UserConfig) => Solver;
+  runNewSolver: (_config: UserConfig) => Solver;
   getSolver: (id: string) => Solver | undefined;
   getAllSolvers: () => Solver[];
   deleteSolver: (id: string) => void;
 }>({
-  createNewSolver: (_config: UserConfig) => new Solver("0", _config),
+  runNewSolver: (_config: UserConfig) => new Solver("0", _config),
   getSolver: (id: string) => undefined,
   getAllSolvers: () => [],
   deleteSolver: (id: string) => {},
@@ -18,9 +18,17 @@ export const AppContext = createContext<{
 const AppState: React.FC = ({ children }) => {
   const [solvers, setSolvers] = useState<Solver[]>([]);
 
-  const createNewSolver = (_config: UserConfig) => {
+  const runNewSolver = (_config: UserConfig) => {
     const id = getUUID();
     const solver = new Solver(id, _config);
+
+    // const solver: SolverT = {
+    //   id,
+    //   status: "INITIALIZED",
+    //   userConfig: _config,
+    //   terminationResult: null
+    // }
+
     setSolvers([...solvers, solver]);
     return solver;
   };
@@ -38,12 +46,16 @@ const AppState: React.FC = ({ children }) => {
 
   return (
     <>
-      <AppContext.Provider value={{
-        createNewSolver,
-        getSolver,
-        getAllSolvers,
-        deleteSolver,
-      }}>{children}</AppContext.Provider>
+      <AppContext.Provider
+        value={{
+          runNewSolver,
+          getSolver,
+          getAllSolvers,
+          deleteSolver,
+        }}
+      >
+        {children}
+      </AppContext.Provider>
     </>
   );
 };
