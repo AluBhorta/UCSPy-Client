@@ -9,7 +9,7 @@ import {
   ButtonGroup,
 } from "@material-ui/core";
 import UploadDataModal from "../components/UploadDataModal";
-import { dataPageNames } from "../AppState";
+import { dataPageNames } from "../models/DataPage";
 import { Link } from "react-router-dom";
 
 const DataDetailPage: React.FC<{

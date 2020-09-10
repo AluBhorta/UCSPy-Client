@@ -3,12 +3,6 @@ import { Solver } from "./models/Solver";
 import { UserConfig } from "./models/Config";
 import { getUUID } from "./util/Util";
 
-export enum dataPageNames {
-  "schedule-params" = 0,
-  "logs" = 1,
-  "schedules" = 2,
-}
-
 export const AppContext = createContext<{
   createNewSolver: (_config: UserConfig) => Solver;
   getSolver: (id: string) => Solver | undefined;

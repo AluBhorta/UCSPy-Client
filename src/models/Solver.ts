@@ -9,8 +9,17 @@ export type SolverProgressUpdate = {
 
 export type SolverTerminationResult = {
   timeTakenInSeconds: number;
+  finalFitness: number;
+  finalEpoch: number;
   scheduleFileName: string;
   logFileName: string;
+} | null;
+
+export type SolverT = {
+  status: SolverStatus;
+  id: string;
+  userConfig: UserConfig;
+  terminationResult: SolverTerminationResult;
 };
 
 export class Solver {

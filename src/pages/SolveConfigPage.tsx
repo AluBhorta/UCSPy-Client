@@ -23,7 +23,7 @@ import { UserConfig, ConfigDescription } from "../models/Config";
 import { AppContext } from "../AppState";
 import DataApiClient from "../api/DataApiClient";
 import UploadDataModal from "../components/UploadDataModal";
-import { dataPageNames } from "../AppState";
+import { dataPageNames } from "../models/DataPage";
 
 const SolveConfigPage: React.FC = () => {
   const { createNewSolver } = useContext(AppContext);

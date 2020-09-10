@@ -10,7 +10,7 @@ import {
   ListItemSecondaryAction,
   TextField,
 } from "@material-ui/core";
-import { dataPageNames } from "../AppState";
+import { dataPageNames } from "../models/DataPage";
 import Error404Page from "../pages/Error404Page";
 
 function getModalStyle() {
