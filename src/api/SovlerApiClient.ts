@@ -1,10 +1,12 @@
 import io from "socket.io-client";
-import { UserConfig } from "../models/Config";
+import { SolverT } from "../models/Solver";
 
 export default class SolverApiClient {
-  socket = io("http://127.0.0.1:1234/");
+  socket: SocketIOClient.Socket;
 
-  constructor() {
+  constructor(API_URL = "http://127.0.0.1:1234/") {
+    this.socket = io(API_URL);
+
     this.socket.on("connect", () => {
       console.log("connected");
     });
@@ -23,12 +25,16 @@ export default class SolverApiClient {
   }
 
   // runSolver(config) -> id/channel/socket
-  runSolver = (userConfig: UserConfig) => {
-    this.socket.emit("solve", JSON.stringify(userConfig));
+  runSolver = (solver: SolverT) => {
+    this.socket.emit("solve", JSON.stringify(solver));
   };
 
   // stopSolver(id) -> SolverResult {schedule, log}
   stopSolver = (id: string) => {
     this.socket.emit("stop", id);
+  };
+
+  close = () => {
+    const s= this.socket.close();
   };
 }

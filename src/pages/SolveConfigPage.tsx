@@ -24,9 +24,11 @@ import DataApiClient from "../api/DataApiClient";
 import UploadDataModal from "../components/UploadDataModal";
 import { dataPageNames } from "../models/DataPage";
 import SolverApiClient from "../api/SovlerApiClient";
+import { AppContext } from "../AppState";
 
 const SolveConfigPage: React.FC = () => {
   const history = useHistory();
+  const { runNewSolver } = useContext(AppContext);
 
   const [loading, setLoading] = useState(true);
   const [openUploadModal, setOpenUploadModal] = useState(false);
@@ -100,10 +102,7 @@ const SolveConfigPage: React.FC = () => {
   }, []);
 
   const handleRunClick = () => {
-    const solverApiClient = new SolverApiClient();
-    // const solverApiClient = new SolverApiClient();
-    solverApiClient.runSolver(userConfig);
-
+    runNewSolver(userConfig);
     // history.push(`/solve/run/${solver.getId()}`);
   };
 

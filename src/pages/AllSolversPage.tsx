@@ -20,10 +20,10 @@ const AllSolversPage: React.FC = () => {
           <ListItemText>Solver ID</ListItemText>
         </ListItem>
         {solvers.map((solver, idx) => (
-          <Link key={idx} to={`/solve/run/${solver.getId()}`}>
+          <Link key={idx} to={`/solve/run/${solver.id}`}>
             <ListItem button>
-              <ListItemText>{solver.getStatus()}</ListItemText>
-              <ListItemText>{solver.getId()}</ListItemText>
+              <ListItemText>{solver.status}</ListItemText>
+              <ListItemText>{solver.id}</ListItemText>
             </ListItem>
           </Link>
         ))}
