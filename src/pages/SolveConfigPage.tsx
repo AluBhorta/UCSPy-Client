@@ -146,10 +146,10 @@ const SolveConfigPage: React.FC = () => {
         <Grid item md>
           <Paper>
             <Box padding={2}>
-              <h2>Schedle Param</h2>
+              <h2>Schedule Param</h2>
               <div>
                 <FormControl>
-                  <FormLabel>Select existing Schedle Param</FormLabel>
+                  <FormLabel>Select existing Schedule Param</FormLabel>
                   <Select
                     id="scheduleParamInput"
                     value={userConfig.scheduleParamName}
@@ -228,9 +228,9 @@ const SolveConfigPage: React.FC = () => {
                   <Slider
                     min={0}
                     max={1}
-                    defaultValue={userConfig.fitness.minAcceptableFitness}
+                    defaultValue={0.5}
                     aria-labelledby="discrete-slider-always"
-                    step={0.001}
+                    step={0.01}
                     valueLabelDisplay="auto"
                     onChange={(e) => {
                       // TODO: change userConfig
