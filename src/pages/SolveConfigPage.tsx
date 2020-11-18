@@ -18,6 +18,8 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import PublishIcon from '@material-ui/icons/Publish';
 
 import { UserConfig, ConfigDescription } from "../models/Config";
 import DataApiClient from "../api/DataApiClient";
@@ -103,8 +105,8 @@ const SolveConfigPage: React.FC = () => {
   const handleRunClick = () => {
     runNewSolver(userConfig).then((solver) => {
       setTimeout(() => {
-        history.push(`/solve/run/${solver.id}`);
-      }, 500);
+        history.push(`/solve/detail/${solver.id}`);
+      }, 200);
     });
   };
 
@@ -119,8 +121,27 @@ const SolveConfigPage: React.FC = () => {
 
   return (
     <div>
-      <h1>Configure Solver</h1>
+      <Grid container justify="space-between">
+        <Grid item>
+          <h1>Configure Solver</h1>
+        </Grid>
+        <Grid item>
+          <Box margin={2}>
+            <Button
+              size="large"
+              variant="contained"
+              color="primary"
+              onClick={() => handleRunClick()}
+              startIcon={<DirectionsRunIcon />}
+            >
+              RUN!
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+
       <hr />
+
       <Grid container spacing={4} justify="space-evenly">
         <Grid item md>
           <Paper>
@@ -158,6 +179,7 @@ const SolveConfigPage: React.FC = () => {
                   variant="contained"
                   color="primary"
                   onClick={() => setOpenUploadModal(true)}
+                  startIcon={<PublishIcon />}
                 >
                   Upload
                 </Button>
@@ -382,16 +404,6 @@ const SolveConfigPage: React.FC = () => {
           </Paper>
         </Grid>
       </Grid>
-      <Box margin={2}>
-        <Button
-          size="large"
-          variant="contained"
-          color="secondary"
-          onClick={() => handleRunClick()}
-        >
-          RUN!
-        </Button>
-      </Box>
 
       <UploadDataModal
         pageName={dataPageNames[0]}

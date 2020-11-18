@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import InspectScheduleTable from "../components/ScheduleTable";
 import Error404Page from "./Error404Page";
 import { InspectData } from "../models/InspectData";
-import { CircularProgress, Button } from "@material-ui/core";
+import { CircularProgress, Button, Box } from "@material-ui/core";
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 const InspectPage: React.FC<{
   scheduleFileName: string;
@@ -57,11 +58,6 @@ const InspectPage: React.FC<{
     <div>
       <h1>Inspect: {scheduleFileName}</h1>
       <p>Fitness: {inspectData.fitness}</p>
-      <span>
-        <Button variant="contained" color="primary">
-          Download
-        </Button>
-      </span>
 
       <InspectScheduleTable inspectData={inspectData} />
     </div>
