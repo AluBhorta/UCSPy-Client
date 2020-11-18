@@ -5,31 +5,45 @@ import Error404Page from "./Error404Page";
 import { SolverT } from "../models/Solver";
 
 const SolveRunPage: React.FC<{ id: string }> = ({ id }) => {
-  const { getSolver } = useContext(AppContext);
+  const { getSolver, stopSolver } = useContext(AppContext);
+  const [solver, setSolver] = useState<SolverT | undefined>(undefined);
+
   const [currentEpoch, setCurrentEpoch] = useState(10);
   const [currentFitness, setCurrentFitness] = useState(0.8);
 
-  const [solver, setSolver] = useState<SolverT | undefined>(undefined);
+  const [solverStatus, setSolverStatus] = useState(solver?.status);
 
   useEffect(() => {
-    setSolver(getSolver(id));
+    const _s = getSolver(id);
+    setSolver(_s);
+    setSolverStatus(_s?.status);
     return () => {};
-  }, [id]);
+  }, [id, getSolver, solverStatus]);
 
-  if (solver === undefined) {
+  if (!solver) {
     return <Error404Page message={`No Solver found with id: ${id}`} />;
   }
 
   return (
     <div>
-      <h1>{solver.status} </h1>
+      <h1>{solverStatus} </h1>
       <p>Solver id: {id}</p>
 
-      <LinearProgress variant="indeterminate" value={currentEpoch + 1} />
+      <LinearProgress
+        variant={solverStatus === "RUNNING" ? "indeterminate" : "determinate"}
+        value={0}
+      />
       <p>Current epoch: {currentEpoch}</p>
       <p>Current Fitness: {currentFitness}</p>
 
-      <Button variant="contained" color="secondary" size="large">
+      <Button
+        variant="contained"
+        color="secondary"
+        size="large"
+        onClick={() => {
+          stopSolver(id);
+        }}
+      >
         STOP!
       </Button>
     </div>

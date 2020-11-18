@@ -1,30 +1,62 @@
 import React, { createContext, useState } from "react";
-import { SolverT } from "./models/Solver";
+import { SolverT, SolverTerminationResult } from "./models/Solver";
 import { UserConfig } from "./models/Config";
 import { getUUID } from "./util/Util";
 import SolverApiClient from "./api/SovlerApiClient";
 
-export const AppContext = createContext<{
-  runNewSolver: (_config: UserConfig) => SolverT;
+interface IAppContext {
+  runNewSolver: (_config: UserConfig) => Promise<SolverT>;
   getSolver: (id: string) => SolverT | undefined;
   getAllSolvers: () => SolverT[];
-  deleteSolver: (id: string) => void;
-}>({
-  runNewSolver: (_config: UserConfig) => ({
-    id: "0",
-    status: "INITIALIZED",
-    userConfig: _config,
-  }),
+  stopSolver: (id: string) => void;
+}
+
+export const AppContext = createContext<IAppContext>({
+  runNewSolver: (_config: UserConfig) =>
+    Promise.reject({
+      id: "0",
+      status: "INITIALIZED",
+      userConfig: _config,
+    }),
   getSolver: (id: string) => undefined,
   getAllSolvers: () => [],
-  deleteSolver: (id: string) => {},
+  stopSolver: (id: string) => {},
 });
 
 const AppState: React.FC = ({ children }) => {
   const [solverTs, setSolverTs] = useState<SolverT[]>([]);
-  const solverApiClient = new SolverApiClient();
 
-  const runNewSolver = (_config: UserConfig) => {
+  // ws event handlers
+  const onProgress = (progress: string) => {
+    // console.log(`Progress! ${progress}`);
+    console.log(`Progress! ${JSON.stringify(progress)}`);
+    // console.log(`Progress! ${JSON.parse(progress)}`);
+  };
+
+  const onCompleted = (result: SolverTerminationResult) => {
+    const newSolvers: SolverT[] = solverTs.map((s) =>
+      s.id === result.id ? { ...s, status: "TERMINATED" } : s
+    );
+    setSolverTs(newSolvers);
+    console.log(`Completed: ${result}`);
+  };
+
+  const onStopped = (result: SolverTerminationResult) => {
+    const newSolvers: SolverT[] = solverTs.map((s) =>
+      s.id === result.id ? { ...s, status: "TERMINATED" } : s
+    );
+    setSolverTs(newSolvers);
+    console.log(`Stopped: ${result}`);
+  };
+
+  const solverApiClient = new SolverApiClient(
+    onProgress,
+    onCompleted,
+    onStopped
+  );
+
+  // context properties
+  const runNewSolver = async (_config: UserConfig) => {
     const id = getUUID();
     const solver: SolverT = {
       id,
@@ -32,8 +64,10 @@ const AppState: React.FC = ({ children }) => {
       userConfig: _config,
     };
 
-    solverApiClient.runSolver(solver);
-
+    await solverApiClient.runSolver(solver, () => {
+      console.log(`Successfully running solver id: ${id}`);
+    });
+    solver.status = "RUNNING";
     setSolverTs([...solverTs, solver]);
 
     return solver;
@@ -45,10 +79,18 @@ const AppState: React.FC = ({ children }) => {
 
   const getAllSolvers = () => solverTs;
 
-  const deleteSolver = (id: string) => {
-    // const _solvers = solvers.filter((s) => s.getId() !== id);
-    // setSolvers(_solvers);
-    throw new Error("ERROR! Not yet implemented!");    
+  const stopSolver = async (id: string) => {
+    await solverApiClient.stopSolver(id, () => {
+      console.log(`Stop request sent for ${id}`);
+    });
+
+    // mock
+    setTimeout(() => {
+      const newSolvers: SolverT[] = solverTs.map((s) =>
+        s.id === id ? { ...s, status: "TERMINATED" } : s
+      );
+      setSolverTs(newSolvers);
+    }, 2000);
   };
 
   return (
@@ -58,7 +100,7 @@ const AppState: React.FC = ({ children }) => {
           runNewSolver,
           getSolver,
           getAllSolvers,
-          deleteSolver,
+          stopSolver,
         }}
       >
         {children}

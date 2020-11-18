@@ -1,40 +1,45 @@
 import io from "socket.io-client";
-import { SolverT } from "../models/Solver";
+import { SolverT, SolverTerminationResult } from "../models/Solver";
 
 export default class SolverApiClient {
   socket: SocketIOClient.Socket;
+  API_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:1234/";
 
-  constructor(API_URL = "http://127.0.0.1:1234/") {
-    this.socket = io(API_URL);
+  constructor(
+    onProgress?: CallableFunction,
+    onCompleted?: CallableFunction,
+    onStopped?: CallableFunction
+  ) {
+    this.socket = io(this.API_URL, { autoConnect: false });
 
-    this.socket.on("connect", () => {
-      console.log("connected");
+    this.socket.on("progress", (progress: string) => {
+      if (onProgress) {
+        onProgress(progress);
+      }
     });
 
-    this.socket.on("disconnect", () => {
-      console.log("disconnected");
+    this.socket.on("completed", (result: SolverTerminationResult) => {
+      if (onCompleted) {
+        onCompleted(result);
+      }
     });
 
-    this.socket.on("message", (data: any) => {
-      console.log("message", data);
-    });
-
-    this.socket.on("progress", (data: any) => {
-      console.log("progress", JSON.parse(data));
+    this.socket.on("stopped", (result: SolverTerminationResult) => {
+      if (onStopped) {
+        onStopped(result);
+      }
     });
   }
 
-  // runSolver(config) -> id/channel/socket
-  runSolver = (solver: SolverT) => {
-    this.socket.emit("solve", JSON.stringify(solver));
+  runSolver = (solver: SolverT, cb?: CallableFunction) => {
+    this.socket.emit("solve", JSON.stringify(solver), cb);
   };
 
-  // stopSolver(id) -> SolverResult {schedule, log}
-  stopSolver = (id: string) => {
-    this.socket.emit("stop", id);
+  stopSolver = (id: string, cb?: CallableFunction) => {
+    this.socket.emit("stop", id, cb);
   };
 
   close = () => {
-    const s= this.socket.close();
+    this.socket.close();
   };
 }

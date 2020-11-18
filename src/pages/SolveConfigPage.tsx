@@ -23,7 +23,6 @@ import { UserConfig, ConfigDescription } from "../models/Config";
 import DataApiClient from "../api/DataApiClient";
 import UploadDataModal from "../components/UploadDataModal";
 import { dataPageNames } from "../models/DataPage";
-import SolverApiClient from "../api/SovlerApiClient";
 import { AppContext } from "../AppState";
 
 const SolveConfigPage: React.FC = () => {
@@ -102,13 +101,11 @@ const SolveConfigPage: React.FC = () => {
   }, []);
 
   const handleRunClick = () => {
-    runNewSolver(userConfig);
-    // history.push(`/solve/run/${solver.getId()}`);
-  };
-
-  const handleStopClick = () => {
-    const solverApiClient = new SolverApiClient();
-    solverApiClient.stopSolver("21");
+    runNewSolver(userConfig).then((solver) => {
+      setTimeout(() => {
+        history.push(`/solve/run/${solver.id}`);
+      }, 500);
+    });
   };
 
   if (loading) {
@@ -393,14 +390,6 @@ const SolveConfigPage: React.FC = () => {
           onClick={() => handleRunClick()}
         >
           RUN!
-        </Button>
-
-        <Button
-          size="large"
-          variant="contained"
-          onClick={() => handleStopClick()}
-        >
-          TMP STOP
         </Button>
       </Box>
 
