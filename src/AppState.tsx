@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { SolverT, SolverTerminationResult } from "./models/Solver";
 import { UserConfig } from "./models/Config";
 import { getUUID } from "./util/Util";
@@ -54,6 +54,12 @@ const AppState: React.FC = ({ children }) => {
     onCompleted,
     onStopped
   );
+
+  useEffect(() => {
+    return () => {
+      solverApiClient.close();
+    };
+  }, []);
 
   // context properties
   const runNewSolver = async (_config: UserConfig) => {

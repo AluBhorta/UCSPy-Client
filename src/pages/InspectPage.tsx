@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import InspectScheduleTable from "../components/ScheduleTable";
 import Error404Page from "./Error404Page";
 import { InspectData } from "../models/InspectData";
-import { CircularProgress, Button, Box } from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import Loading from "../components/Loading";
 
 const InspectPage: React.FC<{
   scheduleFileName: string;
@@ -46,12 +45,7 @@ const InspectPage: React.FC<{
   }
 
   if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-        <CircularProgress />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

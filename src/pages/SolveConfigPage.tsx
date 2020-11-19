@@ -15,17 +15,17 @@ import {
   FormLabel,
   Divider,
   ListItemIcon,
-  CircularProgress,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
-import PublishIcon from '@material-ui/icons/Publish';
+import PublishIcon from "@material-ui/icons/Publish";
 
 import { UserConfig, ConfigDescription } from "../models/Config";
 import DataApiClient from "../api/DataApiClient";
 import UploadDataModal from "../components/UploadDataModal";
 import { dataPageNames } from "../models/DataPage";
 import { AppContext } from "../AppState";
+import Loading from "../components/Loading";
 
 const SolveConfigPage: React.FC = () => {
   const history = useHistory();
@@ -112,10 +112,7 @@ const SolveConfigPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div>
-        <p>Loading...</p>
-        <CircularProgress />
-      </div>
+      <Loading />
     );
   }
 

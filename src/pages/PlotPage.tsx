@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LogFileData } from "../models/Log";
-import { CircularProgress, Grid, Paper, Box } from "@material-ui/core";
+import { Grid, Paper, Box } from "@material-ui/core";
 import Error404Page from "./Error404Page";
-import { Redirect } from "react-router-dom";
 import {
   LineChart,
   XAxis,
@@ -13,6 +12,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Loading from "../components/Loading";
 
 const PlotPage: React.FC<{
   logFileName: string;
@@ -40,12 +40,7 @@ const PlotPage: React.FC<{
   }, [logFileName]);
 
   if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-        <CircularProgress />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!loading && logFileData.logFileName === "") {
@@ -66,7 +61,12 @@ const PlotPage: React.FC<{
             <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
             <Legend />
             <Tooltip />
-            <Line type="monotone" dataKey="fintess" stroke="#82ca9d" dot={false} />
+            <Line
+              type="monotone"
+              dataKey="fintess"
+              stroke="#82ca9d"
+              dot={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>

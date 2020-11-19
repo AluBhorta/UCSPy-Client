@@ -1,10 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "../AppState";
-import {
-  List,
-  ListItem,
-  ListItemText,
-} from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const AllSolversPage: React.FC = () => {
@@ -14,20 +10,32 @@ const AllSolversPage: React.FC = () => {
     <div>
       <h1>All Solvers</h1>
 
-      <List>
-        <ListItem>
-          <ListItemText>STATUS</ListItemText>
-          <ListItemText>Solver ID</ListItemText>
-        </ListItem>
-        {solvers.map((solver, idx) => (
-          <Link key={idx} to={`/solve/detail/${solver.id}`}>
-            <ListItem button>
-              <ListItemText>{solver.status}</ListItemText>
-              <ListItemText>{solver.id}</ListItemText>
+      {solvers.length < 1 ? (
+        <>
+          <h3>No Solvers found!</h3>
+          <p>
+            Go to <Link to="/solve/config">solve</Link> to configure and run a
+            new solver.
+          </p>
+        </>
+      ) : (
+        <>
+          <List>
+            <ListItem>
+              <ListItemText>STATUS</ListItemText>
+              <ListItemText>Solver ID</ListItemText>
             </ListItem>
-          </Link>
-        ))}
-      </List>
+            {solvers.map((solver, idx) => (
+              <Link key={idx} to={`/solve/detail/${solver.id}`}>
+                <ListItem button>
+                  <ListItemText>{solver.status}</ListItemText>
+                  <ListItemText>{solver.id}</ListItemText>
+                </ListItem>
+              </Link>
+            ))}
+          </List>
+        </>
+      )}
     </div>
   );
 };
