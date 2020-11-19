@@ -1,13 +1,14 @@
 import React, { createContext, useEffect, useState } from "react";
-import { SolverT, SolverTerminationResult } from "./models/Solver";
+
+import { SolverV2 } from "./models/Solver";
 import { UserConfig } from "./models/Config";
 import { getUUID } from "./util/Util";
 import SolverApiClient from "./api/SovlerApiClient";
 
 interface IAppContext {
-  runNewSolver: (_config: UserConfig, solverName: string) => Promise<SolverT>;
-  getSolver: (id: string) => SolverT | undefined;
-  getAllSolvers: () => SolverT[];
+  runNewSolver: (_config: UserConfig, solverName: string) => Promise<SolverV2>;
+  getSolver: (id: string) => SolverV2 | undefined;
+  getAllSolvers: () => SolverV2[];
   stopSolver: (id: string) => void;
 }
 
@@ -19,36 +20,57 @@ export const AppContext = createContext<IAppContext>({
 });
 
 const AppState: React.FC = ({ children }) => {
-  const [solverTs, setSolverTs] = useState<SolverT[]>([]);
+  const [solverV2s, setSolverV2s] = useState<SolverV2[]>([]);
 
   // ws event handlers
+
+  const onStarted = (solver: SolverV2) => {
+    setSolverV2s((_solvers) =>
+      _solvers.map((s) =>
+        s.id === solver.id ? { ...s, status: "RUNNING" } : s
+      )
+    );
+    console.log(`Started: ${solver.id}`);
+  };
+
+  const onCompleted = (solver: SolverV2) => {
+    setSolverV2s((_solvers) =>
+      _solvers.map((s) =>
+        s.id === solver.id ? { ...s, status: "COMPLETED" } : s
+      )
+    );
+    console.log(`Completed: ${solver}`);
+  };
+
+  const onStopped = (solver: SolverV2) => {
+    setSolverV2s((_solvers) =>
+      _solvers.map((s) =>
+        s.id === solver.id ? { ...s, status: "STOPPED" } : s
+      )
+    );
+    console.log(`Stopped: ${solver}`);
+  };
+
+  const onFailed = (solver: SolverV2) => {
+    setSolverV2s((_solvers) =>
+      solverV2s.map((s) =>
+        s.id === solver.id ? { ...s, status: "FAILED" } : s
+      )
+    );
+    console.log(`Failed: ${solver}`);
+  };
+
   const onProgress = (progress: string) => {
-    // console.log(`Progress! ${progress}`);
     console.log(`Progress! ${JSON.stringify(progress)}`);
-    // console.log(`Progress! ${JSON.parse(progress)}`);
   };
 
-  const onCompleted = (result: SolverTerminationResult) => {
-    const newSolvers: SolverT[] = solverTs.map((s) =>
-      s.id === result.id ? { ...s, status: "COMPLETED" } : s
-    );
-    setSolverTs(newSolvers);
-    console.log(`Completed: ${result}`);
-  };
-
-  const onStopped = (result: SolverTerminationResult) => {
-    const newSolvers: SolverT[] = solverTs.map((s) =>
-      s.id === result.id ? { ...s, status: "STOPPED" } : s
-    );
-    setSolverTs(newSolvers);
-    console.log(`Stopped: ${result}`);
-  };
-
-  const solverApiClient = new SolverApiClient(
-    onProgress,
+  const solverApiClient = new SolverApiClient({
+    onStarted,
     onCompleted,
-    onStopped
-  );
+    onStopped,
+    onFailed,
+    onProgress,
+  });
 
   useEffect(() => {
     return () => {
@@ -59,39 +81,47 @@ const AppState: React.FC = ({ children }) => {
   // context properties
   const runNewSolver = async (_config: UserConfig, solverName: string) => {
     const id = getUUID();
-    const solver: SolverT = {
+    const solver: SolverV2 = {
       id,
       status: "INITIALIZED",
       userConfig: _config,
+      name: solverName,
+      createdAtTimestamp: Date.now().toString(),
+      terminatedAtTimestamp: "",
+      logFileName: "",
+      numSchFileName: "",
+      strSchFileName: "",
     };
 
     await solverApiClient.runSolver(solver, () => {
-      console.log(`Successfully running solver id: ${id}`);
+      console.log(`Requested to run solver: ${id}`);
     });
-    solver.status = "RUNNING";
-    setSolverTs([...solverTs, solver]);
 
+    // TODO: remove mock async running
+    setTimeout(() => {
+      onStarted(solver);
+    }, 2000);
+
+    setSolverV2s([...solverV2s, solver]);
     return solver;
   };
 
   const getSolver = (id: string) => {
-    return solverTs.find((s) => s.id === id);
+    return solverV2s.find((s) => s.id === id);
   };
 
-  const getAllSolvers = () => solverTs;
+  const getAllSolvers = () => solverV2s;
 
   const stopSolver = async (id: string) => {
     await solverApiClient.stopSolver(id, () => {
       console.log(`Stop request sent for ${id}`);
     });
 
-    // mock
+    // TODO: remove this mock with actual API request
     setTimeout(() => {
-      const newSolvers: SolverT[] = solverTs.map((s) =>
-        s.id === id ? { ...s, status: "STOPPED" } : s
-      );
-      setSolverTs(newSolvers);
-    }, 2000);
+      const solver = solverV2s.find((s) => s.id === id);
+      if (solver) onStopped(solver);
+    }, 1000);
   };
 
   return (

@@ -7,21 +7,18 @@ import { useHistory } from "react-router-dom";
 
 import { AppContext } from "../AppState";
 import Error404Page from "./Error404Page";
-import { SolverT } from "../models/Solver";
+import { SolverV2 } from "../models/Solver";
 
 const SolveDetailPage: React.FC<{ id: string }> = ({ id }) => {
   const { getSolver, stopSolver } = useContext(AppContext);
   const history = useHistory();
-  const [solver, setSolver] = useState<SolverT | undefined>(undefined);
-
-  const [solverStatus, setSolverStatus] = useState(solver?.status);
+  const [solver, setSolver] = useState<SolverV2 | undefined>(undefined);
 
   useEffect(() => {
     const _s = getSolver(id);
     setSolver(_s);
-    setSolverStatus(_s?.status);
     return () => {};
-  }, [id, getSolver, solverStatus]);
+  }, [id, getSolver]);
 
   if (!solver) {
     return <Error404Page message={`No Solver found with id: ${id}`} />;
@@ -29,17 +26,16 @@ const SolveDetailPage: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <div>
-      {/* <h1>Solver name: {solver.name}</h1> */}
-      <h1>Solver id: {id}</h1>
-      <p>Status: {solverStatus}</p>
+      <h1>Solver name: {solver.name}</h1>
+      <p>Status: {solver.status}</p>
 
       <LinearProgress
-        variant={solverStatus === "RUNNING" ? "indeterminate" : "determinate"}
+        variant={solver.status === "RUNNING" ? "indeterminate" : "determinate"}
         value={0}
       />
 
       <Box m={2}>
-        {solverStatus === "RUNNING" && (
+        {solver.status === "RUNNING" && (
           <div className="text-center">
             <Button
               variant="contained"
@@ -55,7 +51,7 @@ const SolveDetailPage: React.FC<{ id: string }> = ({ id }) => {
           </div>
         )}
 
-        {(solverStatus === "COMPLETED" || solverStatus === "STOPPED") && (
+        {(solver.status === "COMPLETED" || solver.status === "STOPPED") && (
           <>
             <Grid container justify="space-evenly">
               <Grid item>
