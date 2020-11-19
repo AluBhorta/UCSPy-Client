@@ -7,7 +7,7 @@ export default class DataApiClient {
     return new Promise<ConfigDescription>((resolve, reject) => {
       setTimeout(() => {
         resolve(mockConfigDescription);
-      }, 1000);
+      }, 100);
     });
   };
 

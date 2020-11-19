@@ -5,19 +5,14 @@ import { getUUID } from "./util/Util";
 import SolverApiClient from "./api/SovlerApiClient";
 
 interface IAppContext {
-  runNewSolver: (_config: UserConfig) => Promise<SolverT>;
+  runNewSolver: (_config: UserConfig, solverName: string) => Promise<SolverT>;
   getSolver: (id: string) => SolverT | undefined;
   getAllSolvers: () => SolverT[];
   stopSolver: (id: string) => void;
 }
 
 export const AppContext = createContext<IAppContext>({
-  runNewSolver: (_config: UserConfig) =>
-    Promise.reject({
-      id: "0",
-      status: "INITIALIZED",
-      userConfig: _config,
-    }),
+  runNewSolver: (_config: UserConfig, solverName: string) => Promise.reject(),
   getSolver: (id: string) => undefined,
   getAllSolvers: () => [],
   stopSolver: (id: string) => {},
@@ -35,7 +30,7 @@ const AppState: React.FC = ({ children }) => {
 
   const onCompleted = (result: SolverTerminationResult) => {
     const newSolvers: SolverT[] = solverTs.map((s) =>
-      s.id === result.id ? { ...s, status: "TERMINATED" } : s
+      s.id === result.id ? { ...s, status: "COMPLETED" } : s
     );
     setSolverTs(newSolvers);
     console.log(`Completed: ${result}`);
@@ -43,7 +38,7 @@ const AppState: React.FC = ({ children }) => {
 
   const onStopped = (result: SolverTerminationResult) => {
     const newSolvers: SolverT[] = solverTs.map((s) =>
-      s.id === result.id ? { ...s, status: "TERMINATED" } : s
+      s.id === result.id ? { ...s, status: "STOPPED" } : s
     );
     setSolverTs(newSolvers);
     console.log(`Stopped: ${result}`);
@@ -62,7 +57,7 @@ const AppState: React.FC = ({ children }) => {
   }, []);
 
   // context properties
-  const runNewSolver = async (_config: UserConfig) => {
+  const runNewSolver = async (_config: UserConfig, solverName: string) => {
     const id = getUUID();
     const solver: SolverT = {
       id,
@@ -93,7 +88,7 @@ const AppState: React.FC = ({ children }) => {
     // mock
     setTimeout(() => {
       const newSolvers: SolverT[] = solverTs.map((s) =>
-        s.id === id ? { ...s, status: "TERMINATED" } : s
+        s.id === id ? { ...s, status: "STOPPED" } : s
       );
       setSolverTs(newSolvers);
     }, 2000);

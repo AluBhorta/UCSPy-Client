@@ -29,8 +29,9 @@ const SolveDetailPage: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <div>
+      {/* <h1>Solver name: {solver.name}</h1> */}
       <h1>Solver id: {id}</h1>
-      <p>STATUS: {solverStatus}</p>
+      <p>Status: {solverStatus}</p>
 
       <LinearProgress
         variant={solverStatus === "RUNNING" ? "indeterminate" : "determinate"}
@@ -54,7 +55,7 @@ const SolveDetailPage: React.FC<{ id: string }> = ({ id }) => {
           </div>
         )}
 
-        {solverStatus === "TERMINATED" && (
+        {(solverStatus === "COMPLETED" || solverStatus === "STOPPED") && (
           <>
             <Grid container justify="space-evenly">
               <Grid item>

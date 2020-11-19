@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { Grid, Button } from "@material-ui/core";
-import SettingsIcon from '@material-ui/icons/Settings';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
 const HomePage: React.FC = () => {
@@ -18,9 +18,9 @@ const HomePage: React.FC = () => {
             variant="contained"
             color="primary"
             onClick={() => history.push("/solve/config")}
-            startIcon={<SettingsIcon />}
+            startIcon={<AddCircleIcon />}
           >
-            Solve
+            New Solver
           </Button>
         </Grid>
         <Grid item>

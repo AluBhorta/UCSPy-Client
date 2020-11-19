@@ -7,10 +7,10 @@ export const mockConfigDescription: ConfigDescription = {
     "IUB CSE Autumn 2019",
   ],
   algorithm: {
-    algorithmNames: ["Genetic Algorithm", "Memetic Algorithm"],
+    algorithmNames: ["Genetic Algorithm", "Memetic Algorithm"]
   },
   fitness: {
-    functionNames: ["Default", "TanH"],
+    functionNames: ["tanh", "default", "default_expo"],
   },
   constraints: {
     hardConstraints: [

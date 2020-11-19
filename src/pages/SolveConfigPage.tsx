@@ -15,6 +15,7 @@ import {
   FormLabel,
   Divider,
   ListItemIcon,
+  TextField,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
@@ -33,6 +34,9 @@ const SolveConfigPage: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [openUploadModal, setOpenUploadModal] = useState(false);
+
+  /* input fields */
+  const [solverName, setSolverName] = useState("Test Solver");
 
   const [userConfig, setUserConfig] = useState<UserConfig>({
     scheduleParamName: "",
@@ -103,7 +107,7 @@ const SolveConfigPage: React.FC = () => {
   }, []);
 
   const handleRunClick = () => {
-    runNewSolver(userConfig).then((solver) => {
+    runNewSolver(userConfig, solverName).then((solver) => {
       setTimeout(() => {
         history.push(`/solve/detail/${solver.id}`);
       }, 200);
@@ -111,9 +115,7 @@ const SolveConfigPage: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   return (
@@ -143,10 +145,27 @@ const SolveConfigPage: React.FC = () => {
         <Grid item md>
           <Paper>
             <Box padding={2}>
+              <h2>Solver Name</h2>
+              <FormControl>
+                <FormLabel>Name the solver.</FormLabel>
+                <Box marginTop={2}>
+                  <TextField
+                    label="Solver Name"
+                    value={solverName}
+                    onChange={(e) => setSolverName(e.target.value)}
+                  />
+                </Box>
+              </FormControl>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item md>
+          <Paper>
+            <Box padding={2}>
               <h2>Schedule Param</h2>
               <div>
                 <FormControl>
-                  <FormLabel>Select existing Schedule Param</FormLabel>
+                  <FormLabel>Select existing Schedule Param.</FormLabel>
                   <Select
                     id="scheduleParamInput"
                     value={userConfig.scheduleParamName}
@@ -229,8 +248,14 @@ const SolveConfigPage: React.FC = () => {
                     aria-labelledby="discrete-slider-always"
                     step={0.01}
                     valueLabelDisplay="auto"
-                    onChange={(e) => {
-                      // TODO: change userConfig
+                    onChange={(event, value) => {
+                      setUserConfig({
+                        ...userConfig,
+                        fitness: {
+                          ...userConfig.fitness,
+                          minAcceptableFitness: value as number,
+                        },
+                      });
                     }}
                   />
                 </FormControl>
@@ -386,10 +411,21 @@ const SolveConfigPage: React.FC = () => {
                           max={1}
                           defaultValue={sc.unitPenalty}
                           aria-labelledby="discrete-slider-always"
-                          step={0.001}
+                          step={0.01}
                           valueLabelDisplay="auto"
-                          onChange={(e) => {
-                            // TODO: change userConfig
+                          onChange={(e, value) => {
+                            setUserConfig({
+                              ...userConfig,
+                              constraints: {
+                                ...userConfig.constraints,
+                                softConstraints: userConfig.constraints.softConstraints.map(
+                                  (_sc) =>
+                                    sc.id === _sc.id
+                                      ? { ..._sc, unitPenalty: value as number }
+                                      : _sc
+                                ),
+                              },
+                            });
                           }}
                         />
                       </Box>
