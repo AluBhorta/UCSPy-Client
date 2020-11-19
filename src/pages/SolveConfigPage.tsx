@@ -65,7 +65,7 @@ const SolveConfigPage: React.FC = () => {
     },
   });
 
-  const apiClient = new SolverApiClient({});
+  const apiClient = new SolverApiClient();
 
   useEffect(() => {
     apiClient

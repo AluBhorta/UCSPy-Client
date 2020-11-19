@@ -27,7 +27,7 @@ const AppState: React.FC = ({ children }) => {
   const onStarted = (solver: SolverV2) => {
     setSolverV2s((_solvers) =>
       _solvers.map((s) =>
-        s.id === solver.id ? { ...s, status: "RUNNING" } : s
+        s.id === solver.id ? { ...solver, status: "RUNNING" } : s
       )
     );
     console.log(`Started: ${solver.id}`);
@@ -36,7 +36,7 @@ const AppState: React.FC = ({ children }) => {
   const onCompleted = (solver: SolverV2) => {
     setSolverV2s((_solvers) =>
       _solvers.map((s) =>
-        s.id === solver.id ? { ...s, status: "COMPLETED" } : s
+        s.id === solver.id ? { ...solver, status: "COMPLETED" } : s
       )
     );
     console.log(`Completed: ${solver}`);
@@ -45,7 +45,7 @@ const AppState: React.FC = ({ children }) => {
   const onStopped = (solver: SolverV2) => {
     setSolverV2s((_solvers) =>
       _solvers.map((s) =>
-        s.id === solver.id ? { ...s, status: "STOPPED" } : s
+        s.id === solver.id ? { ...solver, status: "STOPPED" } : s
       )
     );
     console.log(`Stopped: ${solver}`);
@@ -54,7 +54,7 @@ const AppState: React.FC = ({ children }) => {
   const onFailed = (solver: SolverV2) => {
     setSolverV2s((_solvers) =>
       solverV2s.map((s) =>
-        s.id === solver.id ? { ...s, status: "FAILED" } : s
+        s.id === solver.id ? { ...solver, status: "FAILED" } : s
       )
     );
     console.log(`Failed: ${solver}`);
@@ -78,7 +78,7 @@ const AppState: React.FC = ({ children }) => {
     };
   }, []);
 
-  // context properties
+  // AppContext attrs
   const runNewSolver = async (_config: UserConfig, solverName: string) => {
     const id = getUUID();
     const solver: SolverV2 = {
@@ -97,7 +97,7 @@ const AppState: React.FC = ({ children }) => {
       console.log(`Requested to run solver: ${id}`);
     });
 
-    // TODO: remove mock async running
+    // TODO: remove mock async
     setTimeout(() => {
       onStarted(solver);
     }, 2000);
@@ -117,7 +117,7 @@ const AppState: React.FC = ({ children }) => {
       console.log(`Stop request sent for ${id}`);
     });
 
-    // TODO: remove this mock with actual API request
+    // TODO: remove mock async
     setTimeout(() => {
       const solver = solverV2s.find((s) => s.id === id);
       if (solver) onStopped(solver);
